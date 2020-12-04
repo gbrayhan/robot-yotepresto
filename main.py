@@ -51,7 +51,7 @@ iniciarButton.click()
 
 # Get values
 time.sleep(3)
-quantity = browser.find_elements_by_xpath("//div[@class='quantity' and @data-testid='fundingQuantity']")[0].text
+quantity = browser.find_element_by_xpath("//div[@class='quantity']").text
 
 acceptedQualification = ["A1", "A2", "A3", "A4", "A5", "A6", "A7",
                          "B1", "B2", "B3", "B4", "B5", "B6", "B7", "C1"]
@@ -64,7 +64,11 @@ if int(quantity) > 0:
     qualification = browser.find_elements_by_xpath("//span[@class='qualification']")[0].text
     if qualification in acceptedQualification:
         print("Send EMAIL")
+else:
+    time.sleep(3)
+    browser.close()
 
 print("El numero de solicitudes activas es: " + quantity)
-time.sleep(5)
+time.sleep(15)
 browser.close()
+

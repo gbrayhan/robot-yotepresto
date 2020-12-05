@@ -1,7 +1,12 @@
 import os
+import sys
 import time
 
 from selenium import webdriver
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+
 from environs import Env
 
 env = Env()
@@ -50,7 +55,9 @@ iniciarButton = browser.find_elements_by_xpath("//input[@name='commit' and @valu
 iniciarButton.click()
 
 # Get values
-time.sleep(3)
+element_present = EC.presence_of_element_located((By.CLASS_NAME, 'quantity'))
+WebDriverWait(browser, 30).until(element_present)
+
 quantity = browser.find_element_by_xpath("//div[@class='quantity']").text
 
 acceptedQualification = ["A1", "A2", "A3", "A4", "A5", "A6", "A7",
@@ -64,11 +71,9 @@ if int(quantity) > 0:
     qualification = browser.find_elements_by_xpath("//span[@class='qualification']")[0].text
     if qualification in acceptedQualification:
         print("Send EMAIL")
+        time.sleep(10)
 else:
     time.sleep(3)
-    browser.close()
 
 print("El numero de solicitudes activas es: " + quantity)
-time.sleep(15)
 browser.close()
-

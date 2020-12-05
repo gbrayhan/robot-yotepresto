@@ -1,5 +1,4 @@
 import os
-import sys
 import time
 
 from selenium import webdriver
@@ -7,10 +6,24 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 
+from twilio.rest import Client
+
 from environs import Env
 
 env = Env()
 env.read_env()
+
+
+def sendMessage():
+    account_sid = env('TWILIO_ACCOUNT_SID')
+    auth_token = env('TWILIO_AUTH_TOKEN')
+    client = Client(account_sid, auth_token)
+    message = client.messages.create(
+        from_=env("TWILIO_NUMBER"),
+        body='Existe una solicitud de fondeo en YTP',
+        to=env("PERSONAL_NUMBER")
+    )
+
 
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 PATH_CHROMEDRIVER = env("PATH_CHROMEDRIVER")
@@ -70,7 +83,7 @@ if int(quantity) > 0:
     time.sleep(2)
     qualification = browser.find_elements_by_xpath("//span[@class='qualification']")[0].text
     if qualification in acceptedQualification:
-        print("Send EMAIL")
+        sendMessage()
         time.sleep(10)
 else:
     time.sleep(3)

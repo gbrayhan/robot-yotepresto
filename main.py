@@ -84,7 +84,7 @@ if int(quantity) > 0:
     qualification = browser.find_elements_by_xpath("//span[@class='qualification']")[0].text
     if qualification in acceptedQualification:
         sendMessage()
-        time.sleep(200)
+        time.sleep(40)
 else:
     time.sleep(3)
 
